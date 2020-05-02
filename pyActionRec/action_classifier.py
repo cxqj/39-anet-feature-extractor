@@ -6,7 +6,7 @@ from anet_db import Video
 from utils.video_funcs import sliding_window_aggregation_func, default_fusion_func
 import numpy as np
 import time
-import youtube_dl
+import youtube_dl   # 用于下载youtube视频
 import os
 import subprocess
 
@@ -34,27 +34,29 @@ class ActionClassifier(object):
             total_norm_weights: sum of all model_fusion_weights when normalization is wanted, otherwise use None
         """
 
+        # 构建caffe_net
         self.__net_vec = [CaffeNet(x[0], x[1], dev_id,
                                    input_size=(340, 256) if x[4] else None
                                    ) for x in models]
+        #rgb和flow的融合权重
         self.__net_weights = [float(x[2]) for x in models]
 
         if total_norm_weights is not None:
             s = sum(self.__net_weights)
             self.__net_weights = [x/s for x in self.__net_weights]
 
-        self.__input_type = [x[3] for x in models]
-        self.__conv_support = [x[4] for x in models]
+        self.__input_type = [x[3] for x in models]  # [0,1]
+        self.__conv_support = [x[4] for x in models] # [True,False]
 
         self.__num_net = len(models)
 
         # the input size of the network
-        self.__input_size = [x[5] for x in models]
+        self.__input_size = [x[5] for x in models] # [224,224]
 
         # whether we should prepare flow stack
         self.__need_flow = max(self.__input_type) > 0
 
-        # the name in the proto for action classes
+        # the name in the proto for action classes(输出分类结果的层名)
         self.__score_name_resnet = 'caffe.Flatten_673'
         self.__score_name_bn = 'global_pool'
 
@@ -98,8 +100,8 @@ class ActionClassifier(object):
             all_features: RGB ResNet feature and Optical flow BN Inception feature in a list
         """
  
-        duration = getLength(filename)
-        duration_in_second = float(duration[0][15:17])*60+float(duration[0][18:23])
+        duration = getLength(filename)  # 获取视频时长
+        duration_in_second = float(duration[0][15:17])*60+float(duration[0][18:23]) #将视频时长转换为秒
         info_dict = {
           'annotations': list(),
           'url': '',
@@ -111,6 +113,8 @@ class ActionClassifier(object):
         # update dummy video info...
 
         vid_info.path = filename
+        
+        # 处理视频的对象
         video_proc = VideoProc(vid_info)
         video_proc.open_video(True)
 
