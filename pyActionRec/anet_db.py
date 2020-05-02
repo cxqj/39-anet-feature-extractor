@@ -56,6 +56,14 @@ class Instance(object):
 class Video(object):
     """
     This class represents one video in the activity-net db
+    params:
+        key:'0'
+        info: info_dict = {
+              'annotations': list(),
+              'url': '',
+              'duration': duration_in_second,
+              'subset': 'testing'
+             }       
     """
     def __init__(self, key, info, name_idx_mapping=None):
         self._id = key
