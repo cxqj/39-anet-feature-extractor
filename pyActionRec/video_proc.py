@@ -12,7 +12,7 @@ class VideoProc(object):
 
     def __init__(self, vid_info, open_on_init=False):
         self._vid_info = vid_info
-        self._vid_path = vid_info.path
+        self._vid_path = vid_info.path  # 文件名
         self._instances = vid_info.instances
 
         # video info
@@ -65,6 +65,7 @@ class VideoProc(object):
             self._real_fps = self._frame_count / float(self._vid_info.duration)
             self._loaded = True
 
+    # timely=True, ignore_err=True, interval=0.5,length=6 if self.__need_flow else 1,new_size=(340, 256)
     def frame_iter(self, starting_frame=0, interval=1, length=1, timely=False, new_size=None, ignore_err=False):
         """
         This is a generator that will return a set of frames according to step and length
@@ -82,7 +83,7 @@ class VideoProc(object):
 
         if timely:
             # calculate the frame interval for the time interval
-            frame_interval = int(math.ceil(self._real_fps * interval))
+            frame_interval = int(math.ceil(self._real_fps * interval))  # self._real_fps=
             print('frame interval is {}'.format(frame_interval))
         else:
             frame_interval = interval
