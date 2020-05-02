@@ -2,7 +2,7 @@ from config import ANET_CFG
 
 import sys
 
-sys.path.append(ANET_CFG.CAFFE_ROOT+'/python')
+sys.path.append(ANET_CFG.CAFFE_ROOT+'/python')  # CAFFE_ROOT:'lib/caffe-action/'
 
 import caffe
 from caffe.io import oversample
