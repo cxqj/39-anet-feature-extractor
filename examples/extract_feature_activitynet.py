@@ -24,6 +24,7 @@ GPU=args.gpu
 
 models=[]
 
+#(model_proto, model_params, model_fusion_weight, input_type, conv_support, input_size)
 models = [('models/resnet200_anet_2016_deploy.prototxt',
            'models/resnet200_anet_2016.caffemodel',
            1.0, 0, True, 224)]
